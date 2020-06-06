@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tubaboy5/twitterSentimentAnalyzer#readme",
   "dependencies": {
+    "@google-cloud/language": "^4.0.1",
     "dotenv": "^8.2.0",
     "twitter-lite": "^0.13.0"
   }
