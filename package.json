@@ -4,6 +4,7 @@
   "description": "Working through a project found on freecodecamp to create a twitter sentiment analyzer",
   "main": "index.js",
   "scripts": {
+    "start": "GOOGLE_APPLICATION_CREDENTIALS='./gcloud-private-key.json' node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
