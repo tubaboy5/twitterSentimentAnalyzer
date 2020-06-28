@@ -4,8 +4,8 @@
   "description": "Working through a project found on freecodecamp to create a twitter sentiment analyzer",
   "main": "index.js",
   "scripts": {
-    "start": "GOOGLE_APPLICATION_CREDENTIALS='./gcloud-private-key.json' node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "GOOGLE_APPLICATION_CREDENTIALS='./credentials.json' node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1s"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/tubaboy5/twitterSentimentAnalyzer#readme",
   "dependencies": {
-    "@google-cloud/language": "^4.0.1",
+    "@google-cloud/language": "^4.1.0",
     "dotenv": "^8.2.0",
     "twitter-lite": "^0.13.0"
   }

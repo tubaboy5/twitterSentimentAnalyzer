@@ -1,32 +1,52 @@
 require("dotenv").config();
 
-const Twitter = require("twitter-lite");
+const Twitter = require('twitter-lite');
+const language = require('@google-cloud/language');
+const languageClient = new language.LanguageServiceClient();
 
-(async function () {
-  const user = new Twitter({
+const user = new Twitter({
     consumer_key: process.env.API_KEY,
     consumer_secret: process.env.API_SECRET_KEY,
   });
 
-  try {
-    let response = await user.getBearerToken();
-    const app = new Twitter({
-      bearer_token: response.access_token,
-    });
+  searchForTweets("Beach");
 
-    // Search for recent tweets from the twitter API
-    response = await app.get(`/search/tweets`, {
-      q: "Lionel Messi", // The search term
-      lang: "en", // Let's only get English tweets
-      count: 100, // Limit the results to 100 tweets
-    });
-
-    // Loop over all the tweets and print the text
-    for (tweet of response.statuses) {
-      console.dir(tweet.text);
-    }
-  } catch (e) {
-    console.log("There was an error calling the Twitter API");
-    console.dir(e);
+  async function searchForTweets(query) {
+      try {
+          let response = await user.getBearerToken();
+          const app = new Twitter({
+              bearer_token: response.access_token,
+          });
+  
+          response = await app.get(`/search/tweets`, {
+              q: query,
+              lang: "en",
+              count: 100,
+          });
+  
+          let allTweets = "";
+          for (tweet of response.statuses) {
+              allTweets += tweet.text + "\n";
+          }
+  
+          const sentimentScore = await getSentimentScore(allTweets);
+          console.log(`The sentiment about ${query} is: ${sentimentScore}`);
+  
+      } catch(e) {
+          console.log("There was an error calling the Twitter API");
+          console.dir(e);
+      }
   }
-})();
+  
+  async function getSentimentScore(text) {
+      const document = {
+          content: text,
+          type: 'PLAIN_TEXT',
+      };
+  
+      // Detects the sentiment of the text
+      const [result] = await languageClient.analyzeSentiment({document: document});
+      const sentiment = result.documentSentiment;
+  
+      return sentiment.score;
+  }
